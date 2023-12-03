@@ -96,17 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const agregarPirataBtn = document.getElementById("agregarPirataBtn");
   const formularioBanda = document.getElementById("formularioBanda");
   const formularioPirata = document.getElementById("formularioPirata");
-  const mostrarBandasActivasBtn = document.getElementById("mostrarBandasActivasBtn");
-  const mostrarTodasBandasBtn = document.getElementById("mostrarTodasBandasBtn");
-  const informeDropdownBtn = document.querySelector(".dropbtn");
-  const recompensaLink = document.querySelector(".dropdown-content a:nth-child(1)");
-  const numMiembrosLink = document.querySelector(".dropdown-content a:nth-child(2)");
-  const ordenAlfabeticoLink = document.querySelector(".dropdown-content a:nth-child(3)");
+  
   
 
-  recompensaLink.addEventListener("click", mostrarSoloBandasActivasPorRecompensa);
-  numMiembrosLink.addEventListener("click", ordenarPorNumMiembros);
-  ordenAlfabeticoLink.addEventListener("click", ordenarPorNombre);
   // Cargar bandas precargadas en LocalStorage si aún no existen
   if (!localStorage.getItem("bandas")) {
     localStorage.setItem("bandas", JSON.stringify(bandasPrecargadas));
@@ -129,15 +121,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  mostrarTodasBandasBtn.addEventListener("click", function () {
+ 
+  document.getElementById('mostrarTodasBandasBtn').addEventListener('click', function () {
     const bandas = JSON.parse(localStorage.getItem("bandas"));
     mostrarBandas(bandas);
-  });
+    ordenarBandasSelect.selectedIndex = 0;
+});
 
-  // Evento para mostrar solo las bandas activas al hacer clic en el botón
-  mostrarBandasActivasBtn.addEventListener("click", function () {
-    mostrarSoloBandasActivas();
-  });
 
   // Evento para mostrar el formulario de agregar nuevo pirata
   agregarPirataBtn.addEventListener("click", function () {
@@ -161,11 +151,73 @@ document.addEventListener("DOMContentLoaded", function () {
     agregarNuevaBanda();
   });
 
+ 
+
   // Evento para agregar nuevo pirata
   document.getElementById("nuevoPirataForm").addEventListener("submit", function (event) {
     event.preventDefault();
     agregarNuevoPirata();
   });
+  document.getElementById("cancelarAgregarBanda").addEventListener("click", function () {
+    document.getElementById("formularioBanda").style.display = "none";
+});
+
+document.getElementById("cancelarAgregarPirata").addEventListener("click", function () {
+    document.getElementById("formularioPirata").style.display = "none";
+});
+
+
+agregarBandaBtn.addEventListener("click", function () {
+  formularioBanda.style.display = "block";
+});
+
+var ordenarBandasSelect = document.getElementById('ordenarBandas');
+ordenarBandasSelect.addEventListener('change', ordenarBandasSeleccionado);
+
+
+
+function ordenarBandasSeleccionado() {
+  // Obtener el valor seleccionado
+  var opcionSeleccionada = ordenarBandasSelect.value;
+
+  // Obtener las bandas desde el LocalStorage
+  var bandas = JSON.parse(localStorage.getItem("bandas"));
+
+  // Filtrar solo las bandas activas
+  var bandasActivas = bandas.filter(function (banda) {
+      return banda.bandaActiva;
+  });
+
+  // Realizar acciones según la opción seleccionada
+  switch (opcionSeleccionada) {
+      case 'recompensaLider':
+          bandasActivas.sort(function (a, b) {
+              return b.recompensaLider - a.recompensaLider;
+          });
+          break;
+      case 'numMiembros':
+          bandasActivas.sort(function (a, b) {
+              return b.numMiembros - a.numMiembros;
+          });
+          break;
+      case 'nombre':
+          bandasActivas.sort(function (a, b) {
+              return a.nombre.localeCompare(b.nombre);
+          });
+          break;
+      default:
+          // Manejar el caso por defecto o agregar más casos según sea necesario
+          break;
+  }
+
+  // Actualizar las bandas ordenadas en el LocalStorage
+  localStorage.setItem("bandas", JSON.stringify(bandas));
+
+  // Mostrar las bandas ordenadas en el HTML
+  mostrarBandas(bandasActivas);
+}
+
+
 
   // Función para mostrar las bandas en el HTML
   function mostrarBandas(bandas) {
@@ -202,9 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
- 
- //Por mayor recompensa
-  function mostrarSoloBandasActivasPorRecompensa() {
+  function mostrarSoloBandasActivas() {
     const bandas = JSON.parse(localStorage.getItem("bandas"));
     const bandasActivas = bandas.filter((banda) => banda.bandaActiva);
 
@@ -215,29 +265,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     mostrarBandas(bandasActivas);
   }
-
-  function ordenarPorNumMiembros() {
-    const bandas = JSON.parse(localStorage.getItem("bandas"));
-    const bandasActivas = bandas.filter((banda) => banda.bandaActiva);
-  
-    // Ordenar por número de miembros de mayor a menor solo para bandas activas
-    bandasActivas.sort((a, b) => b.numMiembros - a.numMiembros);
-  
-    mostrarBandas(bandasActivas);
-  }
-
-// Por orden alfabético
-function ordenarPorNombre() {
-  const bandas = JSON.parse(localStorage.getItem("bandas"));
-  const bandasActivas = bandas.filter((banda) => banda.bandaActiva);
-
-  // Ordenar alfabéticamente por nombre solo para bandas activas
-  bandasActivas.sort((a, b) => a.nombre.localeCompare(b.nombre));
-
-  mostrarBandas(bandasActivas);
-}
-
-
   // Función para agregar una nueva banda
   function agregarNuevaBanda() {
     const nombreBanda = document.getElementById("nombre").value;
@@ -263,21 +290,21 @@ function ordenarPorNombre() {
       return;
     }
 
-    // Validar el líder de la banda 
+    // Validar el líder de la banda (solo caracteres alfabéticos y máximo 50 caracteres)
     const liderBandaRegex = /^[A-Za-z\s]{1,50}$/;
     if (!liderBandaRegex.test(liderBanda)) {
       alert("Error: Líder de la banda no válido. Debe contener solo caracteres alfabéticos y tener máximo 50 caracteres.");
       return;
     }
 
-    // Validar el nombre del barco 
+    // Validar el nombre del barco (solo caracteres alfabéticos y máximo 50 caracteres)
     const nombreBarcoRegex = /^[A-Za-z\s]{1,50}$/;
     if (!nombreBarcoRegex.test(nombreBarco)) {
       alert("Error: Nombre del barco no válido. Debe contener solo caracteres alfabéticos y tener máximo 50 caracteres.");
       return;
     }
 
-     // Validar el contramaestre 
+     // Validar el contramaestre (solo caracteres alfabéticos y máximo 50 caracteres)
   const contramaestreRegex = /^[A-Za-z\s]{1,50}$/;
   if (!contramaestreRegex.test(contramaestre)) {
     alert("Error: Contramaestre no válido. Debe contener solo caracteres alfabéticos y tener máximo 50 caracteres.");
@@ -335,20 +362,20 @@ function ordenarPorNombre() {
     const bandas = JSON.parse(localStorage.getItem("bandas"));
     const bandaSeleccionada = bandas.find((banda) => banda.nombre === bandaPirata);
 
-      // Validar el nombre del pirata 
+      // Validar el nombre del pirata (solo caracteres alfabéticos y máximo 50 caracteres)
   const nombrePirataRegex = /^[A-Za-z\s]{1,50}$/;
   if (!nombrePirataRegex.test(nombrePirata)) {
     alert("Error: Nombre del pirata no válido. Debe contener solo caracteres alfabéticos y tener máximo 50 caracteres.");
     return;
   }
 
-  // Validar la procedencia del pirata 
+  // Validar la procedencia del pirata (solo caracteres alfabéticos y máximo 50 caracteres)
   const procedenciaPirataRegex = /^[A-Za-z\s]{1,50}$/;
   if (!procedenciaPirataRegex.test(procedenciaPirata)) {
     alert("Error: Procedencia del pirata no válida. Debe contener solo caracteres alfabéticos y tener máximo 50 caracteres.");
     return;
   }
-
+  
     // Crear el nuevo pirata
     const nuevoPirata = {
       nombre: nombrePirata,
@@ -399,4 +426,7 @@ function ordenarPorNombre() {
       `);
     }
   }
+
+
+
 });
