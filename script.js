@@ -330,6 +330,7 @@ function ordenarBandasSeleccionado() {
     localStorage.setItem("bandas", JSON.stringify(bandas));
 
     mostrarBandas(bandas);
+    document.getElementById("nuevaBandaForm").reset();
 
     formularioBanda.style.display = "none";
   }
@@ -406,6 +407,7 @@ function ordenarBandasSeleccionado() {
 
     // Actualizar la lista de bandas en el HTML
     mostrarBandas(bandas);
+    document.getElementById("nuevoPirataForm").reset();
 
     // Cerrar el formulario
     formularioPirata.style.display = "none";
