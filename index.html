@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Registro de Bandas Piratas</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Registro de Bandas Piratas</h1>
+        <button id="mostrarTodasBandasBtn">Mostrar todas las bandas</button>
+        <button id="agregarBandaBtn">Agregar banda</button>
+        <button id="agregarPirataBtn">Agregar pirata</button>
+        <div class="dropdown">
+            <button class="dropbtn">Generar informe de bandas activas por:</button>
+            <div class="dropdown-content">
+              <a href="#">Recompensa</a>
+              <a href="#">Numero de miembros</a>
+              <a href="#">Orden alfabetico</a>
+            </div>
+          </div>
+        <div id="bandasList"></div>
+    </div>
+
+    <div id="formularioPirata" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cerrarFormularioPirata">&times;</span>
+            <h2>Agregar Nuevo Pirata</h2>
+            <form id="nuevoPirataForm">
+                <label for="nombrePirata">Nombre:</label>
+                <br>
+                <input type="text" id="nombrePirata" name="nombrePirata" required>
+                <br>
+                <label for="procedenciaPirata">Procedencia:</label>
+                <br>
+                <input type="text" id="procedenciaPirata" name="procedenciaPirata" required>
+                <br>
+    
+                <label for="recompensaPirata">Recompensa (si tiene):</label>
+                <br>
+                <input type="number" id="recompensaPirata" name="recompensaPirata">
+                <br>
+    
+                <label for="bandaPirata">Asignar a Banda</label><br>
+                <select id="bandaPirata" name="bandaPirata">
+                    <option value="" selected>Seleccionar Banda</option>
+                    <!-- Opciones de bandas se generan dinámicamente en el script.js -->
+                </select>
+                <br>
+                <label for="importantePirata">Importante en la Tripulación:</label>
+                <input type="checkbox" id="importantePirata" name="importantePirata">
+                <br>
+                <button type="submit">Agregar Pirata</button>
+                <button type="button" id="cancelarAgregarPirata">Cancelar</button>
+            </form>
+        </div>
+    </div>
+    <!-- Formulario emergente para agregar una nueva banda -->
+    <div id="formularioBanda" class="modal">
+        <div class="modal-content">
+            <span class="close" id="cerrarFormularioBanda">&times;</span>
+            <h2>Agregar Nueva Banda</h2>
+            <form id="nuevaBandaForm">
+                <label for="nombre">Nombre de la banda:</label>
+                <br>
+                <input type="text" id="nombre" name="nombre" required>
+                <br>
+                <label for="bandera">URL de la bandera:</label>
+                <br>
+                <input type="text" id="bandera" name="bandera" required>
+                <br>
+                <label for="lider">Líder de la banda:</label>
+                <br>
+                <input type="text" id="lider" name="lider" required>
+                <br>
+                <label for="recompensaLider">Recompensa del líder:</label>
+                <br>
+                <input type="number" id="recompensaLider" name="recompensaLider" required>
+                <br>
+                <label for="nombreBarco">Nombre del barco:</label>
+                <br>
+                <input type="text" id="nombreBarco" name="nombreBarco" required>
+                <br>    
+                <label for="numMiembros">Número de miembros:</label>
+                <br>
+                <input type="number" id="numMiembros" name="numMiembros" required>
+                <br>
+                <label for="contramaestre">Contramaestre:</label>
+                <br>
+                <input type="text" id="contramaestre" name="contramaestre" required>
+                <br>
+                <label for="bandaActiva">Banda activa:</label>
+                <select id="bandaActiva" name="bandaActiva" required>
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+                <br>
+                <button type="submit">Agregar Banda</button>
+                <button type="button" id="cancelarAgregarBanda">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    
+    <script src="script.js"></script>
+</body>
+</html>
