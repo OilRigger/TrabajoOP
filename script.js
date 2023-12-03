@@ -428,7 +428,5 @@ function ordenarBandasSeleccionado() {
       `);
     }
   }
-
-
-
+  
 });
