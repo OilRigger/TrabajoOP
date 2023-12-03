@@ -206,7 +206,7 @@ function ordenarBandasSeleccionado() {
           });
           break;
       default:
-          // Manejar el caso por defecto o agregar más casos según sea necesario
+        
           break;
   }
 
